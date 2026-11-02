@@ -1,3 +1,5 @@
+"""Incentive projections: base class plus box and budget feasible sets."""
+
 import numpy as np
 
 

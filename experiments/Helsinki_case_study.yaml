@@ -5,22 +5,20 @@
 metadata: dataset/procdata/metaparams.yaml
 
 # ── User decision model ───────────────────────────────────────────────────────
-# tau/lam_joint/w_le_joint are scaled up relative to the grid case studies
-# because W = MDist is now in metres (hundreds–thousands) rather than grid
-# units (0–~6), so Lam/tau and W/tau stay in the same order of magnitude as
-# the grid scenarios.
-# lam_joint: meters a user is willing to walk from the preferred station
-# given full incentive. w_le_joint: meters a user is willing to walk
-# without incentives before leaving the service, if no cars are available
-# at the preferred station.
-lam_joint:   500  # price sensitivity coefficient
-w_le_joint:  100  # baseline willingness-to-travel (outside-state row, PU only)
-tau:          50  # entropy regularisation temperature
+# Rewards (5) are in metres: the base cost w_ij of picking up in region i for
+# users located in region j is the distance between the two region centres.
+# lam_joint: incentive sensitivity λ — metres of walking a full incentive
+# (θ_i = 1) compensates. w_le_joint: base cost of leaving w_∅ — metres a user
+# tolerates walking without incentives before leaving the service.
+# All rewards are divided by tau, which sets how sharply users choose.
+lam_joint:   500  # incentive sensitivity λ (metres)
+w_le_joint:  100  # base cost of leaving w_∅ (metres)
+tau:          50  # entropy regularisation temperature τ (metres)
 
 # ── Cost weights ──────────────────────────────────────────────────────────────
-gamma_R: 1.          # incentive-deviation weight
-gamma_Q: 10.         # stage state-deviation weight
-g_map_type: leaving  # cost model: "leaving" or "tracking"
+gamma_R: 1.          # incentive cost weight γ_R in (13)
+gamma_Q: 10.         # leaving-user cost weight γ_Q in (13)
+g_map_type: leaving  # cost model: "leaving" (paper, (13)) or "tracking" (track a desired distribution)
 
 # ── Optimiser hyperparameters ─────────────────────────────────────────────────
 phi:      1        # dual gradient step size (KKT sensitivity)
@@ -28,8 +26,8 @@ maxIt:    20       # maximum projected-gradient iterations
 err_thr:  1.0e-4   # gradient-norm convergence threshold
 alph:       1.0    # gradient step size (α_0)
 alph_decay: 3.0    # step size decay exponent p: α_k = α_0 / (k+1)^p, need p > 0.5 for Σα_k² < ∞
-lp_tol:     1.0e-4   # inner LP solver tolerance (CLARABEL) or eps (SCS)
-solver:     SCS      # inner LP solver: "CLARABEL" or "SCS"
+lp_tol:     1.0e-4   # v-GNE solver tolerance (CLARABEL) or eps (SCS)
+solver:     SCS      # v-GNE solver: "CLARABEL" or "SCS"
 
 # ── Projector parameters ──────────────────────────────────────────────────────
 th_box:    1          # box projection: per-entry incentive upper bound
@@ -53,7 +51,7 @@ th0:    0
 
 # ── Demand trajectory ─────────────────────────────────────────────────────────
 # Real pick-up/drop-off demand (users/hour) per 15-min cluster, from 0_pre_proc.py.
-# Held fixed to a single day here since iterate_type is "th0".
+# A single day (no sweep, since iterates is False).
 demand:
   type: file
   dir: dataset/procdata
