@@ -1,6 +1,6 @@
 # ── Map topology ─────────────────────────────────────────────────────────────
 # Real Helsinki city-bike stations (central Helsinki bounding box), built by
-# pre_proc.py. Shared across all days in this procdata set — region ids,
+# 0_pre_proc.py. Shared across all days in this procdata set — region ids,
 # coordinates (projected metres), and region count are the same regardless
 # of which day's demand is used.
 map:

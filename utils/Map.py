@@ -15,7 +15,7 @@ class Map:
 
         {"type": "file", "csv_path": <str>}
             Real region layout from a metadata CSV (same column structure
-            as dataset/procdata/metadata.csv, built by pre_proc.py: id, x, y,
+            as dataset/procdata/metadata.csv, built by 0_pre_proc.py: id, x, y,
             x2, y2, n_stations). Only id/x2/y2 are read. x2/y2 are the
             projected (metric) coordinates (EPSG:3879, ETRS-GK25FIN) and are
             used for the distance matrix; x/y (WGS84 lon/lat) are not.

@@ -9,7 +9,9 @@ from utils.Interface import Interface
 from utils.MainIterate import MainIterate
 
 # ── Quick access ──────────────────────────────────────────────────────────────
-EXPERIMENT  = "Helsinki_rand_init_100"  # experiment name — must match a file in experiments/
+# Paper experiments: "Helsinki_case_study" (Fig. 3, Table I), "Helsinki_comp_days"
+# (Fig. 4), "Helsinki_rand_init_100" (Fig. 5).
+EXPERIMENT  = "Helsinki_case_study"  # experiment name — must match a file in experiments/
 CONTINUE    = True  # True: skip scenarios already saved in results/{EXPERIMENT}/; False: rerun all from the start
 
 # ── Paths ─────────────────────────────────────────────────────────────────────

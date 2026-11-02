@@ -152,23 +152,32 @@ class Plotter:
         return Plotter._basemap_cache
 
     @staticmethod
+    def _draw_saved_basemap(ax):
+        """Draw the saved basemap under ax, downloading it at most once per process.
+
+        If BASEMAP_FILE is missing, the tiles downloaded for the first snapshot
+        are kept in memory and reused by every later one (e.g. animation frames).
+        """
+        Plotter._basemap_cache = Plotter._draw_basemap(ax, Plotter._saved_basemap())
+
+    @staticmethod
     def plot_region_map(region_meta, title="Regions", show=True, ax=None, basemap=True,
                         lon_col="x", lat_col="y", region_col="id", crs="EPSG:4326",
                         basemap_img=None):
         """Plot region locations from a region metadata DataFrame.
 
-        Plots the raw region metadata produced by dataset/proc_dataset*.py
+        Plots the raw region metadata produced by 0_pre_proc.py
         (columns: id, x, y, x2, y2, n_stations). All markers are drawn the
         same size, annotated with region_col.
 
         Args:
             region_meta:   pd.DataFrame — region metadata with lon/lat and
-                           an id column (as saved by proc_dataset*.py's
+                           an id column (as saved by 0_pre_proc.py's
                            metadata.csv).
             title:         str — plot title.
             show:          bool — call plt.show() at the end.
             ax:            matplotlib Axes or None — draw on this axes; creates a new figure if None.
-            basemap:       bool — attempt an OpenStreetMap basemap via contextily.
+            basemap:       bool — attempt an Esri grey-canvas basemap via contextily.
             lon_col:       str — longitude column name.
             lat_col:       str — latitude column name.
             region_col:    str — column name used for point annotations.
@@ -253,12 +262,12 @@ class Plotter:
 
         Args:
             region_meta: pd.DataFrame — region metadata with x2/y2 (projected
-                         meters) and id columns (as saved by proc_dataset*.py's
+                         meters) and id columns (as saved by 0_pre_proc.py's
                          metadata.csv).
             title:       str or None — plot title; None/"" omits it.
             show:        bool — call plt.show() at the end.
             ax:          matplotlib Axes or None — draw on this axes; creates a new figure if None.
-            basemap:     bool — attempt an OpenStreetMap basemap via contextily.
+            basemap:     bool — attempt an Esri grey-canvas basemap via contextily.
             x2_col:      str — projected x column name.
             y2_col:      str — projected y column name.
             id_col:      str — region id column name (used for point annotations).
@@ -464,7 +473,7 @@ class Plotter:
         if used_basemap:
             # The basemap covers the axes' current data limits, so it must
             # be drawn after the scatter.
-            Plotter._draw_basemap(ax, Plotter._saved_basemap())
+            Plotter._draw_saved_basemap(ax)
             ax.set_axis_off()
         else:
             ax.set_xlabel("x", fontsize=Plotter.LABEL_FS)
@@ -587,7 +596,7 @@ class Plotter:
         if used_basemap:
             # The basemap covers the axes' current data limits, so it must
             # be drawn after the scatter.
-            Plotter._draw_basemap(ax, Plotter._saved_basemap())
+            Plotter._draw_saved_basemap(ax)
             ax.set_axis_off()
         else:
             ax.set_xlabel("x", fontsize=Plotter.LABEL_FS)
@@ -706,7 +715,7 @@ class Plotter:
         if used_basemap:
             # The basemap covers the axes' current data limits, so it must
             # be drawn after the scatter.
-            Plotter._draw_basemap(ax, Plotter._saved_basemap())
+            Plotter._draw_saved_basemap(ax)
             ax.set_axis_off()
         else:
             ax.set_xlabel("x", fontsize=Plotter.LABEL_FS)
@@ -837,7 +846,7 @@ class Plotter:
         if used_basemap:
             # The basemap covers the axes' current data limits, so it must
             # be drawn after the scatter.
-            Plotter._draw_basemap(ax, Plotter._saved_basemap())
+            Plotter._draw_saved_basemap(ax)
             ax.set_axis_off()
         else:
             ax.set_xlabel("x", fontsize=Plotter.LABEL_FS)
@@ -951,7 +960,7 @@ class Plotter:
         if used_basemap:
             # The basemap covers the axes' current data limits, so it must
             # be drawn after the scatter.
-            Plotter._draw_basemap(ax, Plotter._saved_basemap())
+            Plotter._draw_saved_basemap(ax)
             ax.set_axis_off()
         else:
             ax.set_xlabel("x", fontsize=Plotter.LABEL_FS)

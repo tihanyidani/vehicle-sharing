@@ -1,6 +1,6 @@
 # ── Map topology ─────────────────────────────────────────────────────────────
 # Real Helsinki city-bike stations (central Helsinki bounding box), built by
-# pre_proc.py. Map (type/csv_path) plus dt/T are shared dataset-level info,
+# 0_pre_proc.py. Map (type/csv_path) plus dt/T are shared dataset-level info,
 # defined once in the procdata set's metaparams.yaml rather than per-scenario.
 metadata: dataset/procdata/metaparams.yaml
 
@@ -53,7 +53,7 @@ x0:     10
 th0:    0
 
 # ── Demand trajectory ─────────────────────────────────────────────────────────
-# Real pick-up/drop-off demand (users/hour) per 15-min cluster, from pre_proc.py.
+# Real pick-up/drop-off demand (users/hour) per 15-min cluster, from 0_pre_proc.py.
 # iterate_type is "demand": sweep the first 10 consecutive days from start_date.
 demand:
   type: file

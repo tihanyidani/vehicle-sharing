@@ -52,7 +52,7 @@ class MainIterate:
     def expand_dates(dir, start_date, n_scenarios):
         """Build the per-day file cfgs for a contiguous run of daily scenarios.
 
-        Assumes the naming convention produced by dataset/proc_dataset.py:
+        Assumes the naming convention produced by 0_pre_proc.py:
         "{dir}/{date}_demand_dropoff.csv" / "{dir}/{date}_demand_pickup.csv",
         one pair per calendar day, dates running contiguously.
 

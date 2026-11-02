@@ -17,7 +17,7 @@ class Demand:
             node: null means all nodes; t_end is exclusive.
 
         {"type": "file", "dropoff_csv": <str>, "pickup_csv": <str>}
-            Real demand from the demand CSVs produced by dataset/proc_dataset.py
+            Real demand from the demand CSVs produced by 0_pre_proc.py
             (rows = 15-min time clusters, columns = region ids). dropoff_csv
             -> DO, pickup_csv -> PU. N = number of region columns, T = number
             of time-cluster rows. Both files must share the same region

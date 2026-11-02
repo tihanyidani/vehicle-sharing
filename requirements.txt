@@ -1,0 +1,20 @@
+# Tested with Python 3.13. Versions pinned to those used for the paper's results.
+
+# Core numerics and optimisation
+numpy==2.4.1
+scipy==1.17.0
+cvxpy==1.8.2
+scs==3.2.11
+clarabel==0.11.1
+
+# Data handling and I/O
+pandas==3.0.3
+pyyaml==6.0.3
+tqdm==4.67.3
+
+# Plotting and animations
+matplotlib==3.10.8
+pillow==12.1.0
+
+# Basemap tiles for the map figures (only needed when the basemap is (re)downloaded)
+contextily==1.7.1
