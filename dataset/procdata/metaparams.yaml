@@ -1,0 +1,12 @@
+# ── Map topology ─────────────────────────────────────────────────────────────
+# Real Helsinki city-bike stations (central Helsinki bounding box), built by
+# pre_proc.py. Shared across all days in this procdata set — region ids,
+# coordinates (projected metres), and region count are the same regardless
+# of which day's demand is used.
+map:
+  type: file
+  csv_path: dataset/procdata/metadata.csv
+
+# ── Dynamics ────────────────────────────────────────────────────────────────
+dt: 1     # time step (hours — demand is in users/hour)
+T:  96    # horizon length — one full day of 15-min demand clusters

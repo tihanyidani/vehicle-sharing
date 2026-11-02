@@ -1,0 +1,62 @@
+# ── Map topology ─────────────────────────────────────────────────────────────
+# Real Helsinki city-bike stations (central Helsinki bounding box), built by
+# pre_proc.py. Map (type/csv_path) plus dt/T are shared dataset-level info,
+# defined once in the procdata set's metaparams.yaml rather than per-scenario.
+metadata: dataset/procdata/metaparams.yaml
+
+# ── User decision model ───────────────────────────────────────────────────────
+# tau/lam_joint/w_le_joint are scaled up relative to the grid case studies
+# because W = MDist is now in metres (hundreds–thousands) rather than grid
+# units (0–~6), so Lam/tau and W/tau stay in the same order of magnitude as
+# the grid scenarios.
+# lam_joint: meters a user is willing to walk from the preferred station
+# given full incentive. w_le_joint: meters a user is willing to walk
+# without incentives before leaving the service, if no cars are available
+# at the preferred station.
+lam_joint:   500  # price sensitivity coefficient
+w_le_joint:  100  # baseline willingness-to-travel (outside-state row, PU only)
+tau:          50  # entropy regularisation temperature
+
+# ── Cost weights ──────────────────────────────────────────────────────────────
+gamma_R: 1.          # incentive-deviation weight
+gamma_Q: 10.         # stage state-deviation weight
+g_map_type: leaving  # cost model: "leaving" or "tracking"
+
+# ── Optimiser hyperparameters ─────────────────────────────────────────────────
+phi:      1        # dual gradient step size (KKT sensitivity)
+maxIt:    20       # maximum projected-gradient iterations
+err_thr:  1.0e-4   # gradient-norm convergence threshold
+alph:       1.0    # gradient step size (α_0)
+alph_decay: 3.0    # step size decay exponent p: α_k = α_0 / (k+1)^p, need p > 0.5 for Σα_k² < ∞
+lp_tol:     1.0e-4   # inner LP solver tolerance (CLARABEL) or eps (SCS)
+solver:     SCS      # inner LP solver: "CLARABEL" or "SCS"
+
+# ── Projector parameters ──────────────────────────────────────────────────────
+th_box:    1          # box projection: per-entry incentive upper bound
+projector_type: box   # incentive projection: "box" or "budget"
+
+# ── Naive approach parameters ─────────────────────────────────────────────
+trigger_thr: 10        # trigger threshold
+trigger_val: 1         # trigger value
+proportional_P: 0.1    # proportional gain
+
+# ── Iteration / sweep settings ─────────────────────────────────────────────────
+iterates:      True    # whether to sweep over iterate_type
+iterate_type:  demand  # which parameter "iterates" sweeps: "th0", "demand" (per-day), or "budget"
+
+# ── Initial  conditions ───────────────────────────────────────────────────────
+# scalar → uniform; list of N values → non-uniform.
+x0:     10
+
+# ── Initial incentive sequence ────────────────────────────────────────────────
+# scalar → uniform; list of N values → non-uniform.
+th0:    0
+
+# ── Demand trajectory ─────────────────────────────────────────────────────────
+# Real pick-up/drop-off demand (users/hour) per 15-min cluster, from pre_proc.py.
+# iterate_type is "demand": sweep the first 10 consecutive days from start_date.
+demand:
+  type: file
+  dir: dataset/procdata
+  start_date: 2025-05-01
+  n_scenarios: 10
