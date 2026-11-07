@@ -1,6 +1,6 @@
 # Incentive-based Fleet Rebalancing in Vehicle-Sharing Systems
 
-**Paper:** [PDF](paper/Tihanyi_Belgioioso_ECC2027_extended.pdf) · Submitted to the 2027 European Control Conference (ECC 2027)
+**Paper:** [PDF](paper/Tihanyi_Belgioioso_2026_extended.pdf) · Submitted to the 2027 European Control Conference (ECC 2027)
 
 Code and data for the paper
 
@@ -10,7 +10,7 @@ The operator of a free-floating vehicle-sharing system offers fare discounts (in
 
 ## Paper
 
-The submitted version of the paper is available in [`paper/`](paper/Tihanyi_Belgioioso_ECC2027_extended.pdf). An extended version will be posted on arXiv.
+The submitted version of the paper is available in [`paper/`](paper/Tihanyi_Belgioioso_2026_extended.pdf). An extended version will be posted on arXiv.
 
 > **Note:** This is the version submitted for peer review and may differ from the final published version.
 
