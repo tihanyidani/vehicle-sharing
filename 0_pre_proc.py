@@ -262,7 +262,14 @@ bounds_fig = Plotter.plot_region_bounds_map(
 )
 bounds_out = os.path.join(FIGURES_DIR, "metadata_region_bounds.pdf")
 # Tight bbox with no padding crops the white margin around the map.
-bounds_fig.savefig(bounds_out, dpi=600, bbox_inches="tight", pad_inches=0)
+# The PDF's vector parts (cells, dots, text) don't depend on dpi; only the
+# basemap raster does, so size it for the paper's print width rather than
+# the 9-in figure (600 dpi here embedded a 4186-px, 7.5 MB image).
+BOUNDS_PRINT_WIDTH_IN = 2.4   # figure width in the paper
+BOUNDS_PRINT_DPI      = 300   # basemap resolution at that width
+tight_width_in = bounds_fig.get_tightbbox(bounds_fig.canvas.get_renderer()).width
+bounds_dpi = BOUNDS_PRINT_DPI * BOUNDS_PRINT_WIDTH_IN / tight_width_in
+bounds_fig.savefig(bounds_out, dpi=bounds_dpi, bbox_inches="tight", pad_inches=0)
 print(f"Saved: {bounds_out}")
 plt.close(map_fig)
 plt.close(bounds_fig)

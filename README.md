@@ -1,16 +1,24 @@
 # Incentive-based Fleet Rebalancing in Vehicle-Sharing Systems
 
+**Paper:** [PDF](paper/Tihanyi_Belgioioso_ECC2027_extended.pdf) · Submitted to the 2027 European Control Conference (ECC 2027)
+
 Code and data for the paper
 
-> D. Tihanyi and G. Belgioioso, "Incentive-based Fleet Rebalancing in Vehicle-Sharing Systems via Equilibrium-Constrained Optimal Control," 2026.
+> D. Tihanyi and G. Belgioioso, "Incentive-based Fleet Rebalancing in Vehicle-Sharing Systems via Equilibrium-Constrained Optimal Control," submitted to the 2027 European Control Conference (ECC), 2026.
 
 The operator of a free-floating vehicle-sharing system offers fare discounts (incentives) that steer users toward alternative pick-up regions. Users' responses are modelled as the variational generalized Nash equilibrium (v-GNE) of logit models coupled through shared vehicle-availability constraints. The incentives over a day of operation solve an optimal control problem with nested equilibrium constraints, which this code solves by projected gradient descent, backpropagating through the equilibria via nonsmooth implicit differentiation. The case study uses Helsinki city-bike data from May 2025.
+
+## Paper
+
+The submitted version of the paper is available in [`paper/`](paper/Tihanyi_Belgioioso_ECC2027_extended.pdf). An extended version will be posted on arXiv.
+
+> **Note:** This is the version submitted for peer review and may differ from the final published version.
 
 ## Installation
 
 Tested with Python 3.13 on Linux.
 
-```bash
+```
 git clone https://github.com/tihanyidani/vehicle-sharing.git
 cd vehicle-sharing
 python3 -m venv .venv
@@ -24,11 +32,11 @@ pip install -r requirements.txt
 
 All scripts are run from the repository root. Each script has a "Quick access" block at the top for selecting the experiment and options.
 
-| Step | Script | Input | Output |
-|---|---|---|---|
-| 1. Pre-processing | `0_pre_proc.py` | `dataset/rawdata/2025-05.csv`, `dataset/metadata/*.csv` | `dataset/procdata/` (regions, per-day demand), `dataset/figures/` (region maps) |
-| 2. Optimisation | `1_main.py` | `experiments/<EXPERIMENT>.yaml`, `dataset/procdata/` | `results/<EXPERIMENT>/<tag>/run.pkl`, convergence figure and table |
-| 3. Post-processing | `2_post_proc.py` | `results/<EXPERIMENT>/` | comparison figures and tables under `results/<EXPERIMENT>/` |
+| Step               | Script           | Input                                                   | Output                                                                          |
+|--------------------|------------------|---------------------------------------------------------|---------------------------------------------------------------------------------|
+| 1. Pre-processing  | `0_pre_proc.py`  | `dataset/rawdata/2025-05.csv`, `dataset/metadata/*.csv` | `dataset/procdata/` (regions, per-day demand), `dataset/figures/` (region maps) |
+| 2. Optimisation    | `1_main.py`      | `experiments/<EXPERIMENT>.yaml`, `dataset/procdata/`    | `results/<EXPERIMENT>/<tag>/run.pkl`, convergence figure and table              |
+| 3. Post-processing | `2_post_proc.py` | `results/<EXPERIMENT>/`                                 | comparison figures and tables under `results/<EXPERIMENT>/`                     |
 
 The processed data and all results are included in the repository, so the figures can be regenerated without running steps 1 and 2.
 
@@ -46,13 +54,13 @@ The processed data and all results are included in the repository, so the figure
 
 Set `EXPERIMENT` (and `NAIVE` where listed) at the top of `1_main.py` and `2_post_proc.py`, then run them in order.
 
-| Paper | `EXPERIMENT` | `NAIVE` | Output |
-|---|---|---|---|
-| Fig. 2 (regions) | n/a: produced by `0_pre_proc.py` | n/a | `dataset/figures/metadata_region_bounds.pdf` |
-| Fig. 3 (incentives and leaving users over the day) | `Helsinki_case_study` | `False` | `results/Helsinki_case_study/run/figs/agg_comp_simple.pdf` |
-| Table I (comparison with baselines) | `Helsinki_case_study` | `True` | `results/Helsinki_case_study/run/tables/u_le_comp.csv` |
-| Fig. 4 (leaving users over 10 days) | `Helsinki_comp_days` | `False` | `results/Helsinki_comp_days/comp_results/figs/leaving_users_comp_days.pdf` |
-| Fig. 5 (100 random initialisations) | `Helsinki_rand_init_100` | ignored | `results/Helsinki_rand_init_100/comp_results/figs/convergence_comp.pdf` |
+| Paper                                              | `EXPERIMENT`                     | `NAIVE` | Output                                                                     |
+|----------------------------------------------------|----------------------------------|---------|----------------------------------------------------------------------------|
+| Fig. 2 (regions)                                   | n/a: produced by `0_pre_proc.py` | n/a     | `dataset/figures/metadata_region_bounds.pdf`                               |
+| Fig. 3 (incentives and leaving users over the day) | `Helsinki_case_study`            | `False` | `results/Helsinki_case_study/run/figs/agg_comp_simple.pdf`                 |
+| Table I (comparison with baselines)                | `Helsinki_case_study`            | `True`  | `results/Helsinki_case_study/run/tables/u_le_comp.csv`                     |
+| Fig. 4 (leaving users over 10 days)                | `Helsinki_comp_days`             | `False` | `results/Helsinki_comp_days/comp_results/figs/leaving_users_comp_days.pdf` |
+| Fig. 5 (100 random initialisations)                | `Helsinki_rand_init_100`         | ignored | `results/Helsinki_rand_init_100/comp_results/figs/convergence_comp.pdf`    |
 
 Running `Helsinki_case_study` with `NAIVE = False` overwrites `u_le_comp.csv` with the zero-incentive and Algorithm 1 rows only. Run it with `NAIVE = True` afterwards to restore the full Table I.
 
@@ -70,25 +78,26 @@ dataset/
   metadata/            HSL station metadata
   procdata/            regions, per-day demand, shared parameters (metaparams.yaml)
   figures/             region maps
+paper/                 submitted version of the paper
 results/               saved runs, figures and tables per experiment
 utils/                 model, algorithm and helpers (below)
 ```
 
 How the modules in `utils/` relate to the paper:
 
-| Module | Paper |
-|---|---|
-| `Params.py` | Model parameters: rewards (5), dynamics (2), cost weights (13) |
-| `Map.py`, `Demand.py` | Regions and inter-region distances; demand flows d^pu, d^do |
-| `T_map.py` | v-GNE (7) solved with CVXPY, primal–dual relation (21), state update map (14) |
-| `dT_map.py` | Algorithm 4: implicit differentiation through the dual fixed point (22) |
-| `g_map.py` | Stage cost (13), (15) and terminal cost |
-| `Optimizer.py` | `ForwardBackward`: Algorithms 1–3 (projected gradient descent, backpropagation, forward pass); `OneStep`: one-step baseline |
-| `Projector.py` | Projection onto the feasible set Ω |
-| `Naive.py` | Trigger and proportional baselines |
-| `Simulator.py` | Simulation of the closed system under a given incentive sequence |
-| `MainIterate.py`, `ProcIterate.py` | Experiment sweeps over days or initial incentives, for `1_main.py` and `2_post_proc.py` |
-| `Plotter.py`, `Interface.py`, `Transformer.py` | Plotting, file I/O and array helpers |
+| Module                                         | Paper                                                                                                                       |
+|------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| `Params.py`                                    | Model parameters: rewards (5), dynamics (2), cost weights (13)                                                              |
+| `Map.py`, `Demand.py`                          | Regions and inter-region distances; demand flows d^pu, d^do                                                                 |
+| `T_map.py`                                     | v-GNE (7) solved with CVXPY, primal–dual relation (21), state update map (14)                                               |
+| `dT_map.py`                                    | Algorithm 4: implicit differentiation through the dual fixed point (22)                                                     |
+| `g_map.py`                                     | Stage cost (13), (15) and terminal cost                                                                                     |
+| `Optimizer.py`                                 | `ForwardBackward`: Algorithms 1–3 (projected gradient descent, backpropagation, forward pass); `OneStep`: one-step baseline |
+| `Projector.py`                                 | Projection onto the feasible set Ω                                                                                          |
+| `Naive.py`                                     | Trigger and proportional baselines                                                                                          |
+| `Simulator.py`                                 | Simulation of the closed system under a given incentive sequence                                                            |
+| `MainIterate.py`, `ProcIterate.py`             | Experiment sweeps over days or initial incentives, for `1_main.py` and `2_post_proc.py`                                     |
+| `Plotter.py`, `Interface.py`, `Transformer.py` | Plotting, file I/O and array helpers                                                                                        |
 
 Notation used in the code: `th` is the incentive θ, `p` the users' choice distribution, `mu` the dual variables μ, and `d` the demand. The state `z` has N + 1 entries: the vehicle distribution x and one entry for users leaving the service.
 
@@ -101,23 +110,23 @@ Notation used in the code: `th` is the incentive θ, `p` the users' choice distr
 
 ## Citation
 
-If you use this code, please cite:
+If you use this code, please cite the paper (GitHub also offers a "Cite this repository" button in the sidebar):
 
 ```bibtex
 @misc{tihanyi2026incentive,
   title  = {Incentive-based Fleet Rebalancing in Vehicle-Sharing Systems via Equilibrium-Constrained Optimal Control},
   author = {Tihanyi, Daniel and Belgioioso, Giuseppe},
   year   = {2026},
-  note   = {Code available at https://github.com/tihanyidani/vehicle-sharing}
+  note   = {Submitted to the 2027 European Control Conference (ECC). Code available at https://github.com/tihanyidani/vehicle-sharing}
 }
 ```
 
 ## License
 
-The code is released under the [MIT License](LICENSE). The HSL data in `dataset/` remains under its original CC BY 4.0 license.
+The code is released under the [MIT License](LICENSE). The HSL data in `dataset/` remains under its original CC BY 4.0 license. The paper in `paper/` is not covered by the MIT License; all rights remain with the authors.
 
 ## Contact
 
-Daniel Tihanyi (tihanyi@kth.se) and Giuseppe Belgioioso (giubel@kth.se), Division of Decision and Control Systems, KTH Royal Institute of Technology, Stockholm, Sweden.
+Daniel Tihanyi ([tihanyi@kth.se](mailto:tihanyi@kth.se)) and Giuseppe Belgioioso ([giubel@kth.se](mailto:giubel@kth.se)), Division of Decision and Control Systems, KTH Royal Institute of Technology, Stockholm, Sweden.
 
 This work was partially supported by the Wallenberg AI, Autonomous Systems and Software Program (WASP) funded by the Knut and Alice Wallenberg Foundation.

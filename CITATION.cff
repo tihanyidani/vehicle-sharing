@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the paper below."
+title: "vehicle-sharing"
+authors:
+  - family-names: Tihanyi
+    given-names: Daniel
+    affiliation: KTH Royal Institute of Technology
+  - family-names: Belgioioso
+    given-names: Giuseppe
+    affiliation: KTH Royal Institute of Technology
+repository-code: "https://github.com/tihanyidani/vehicle-sharing"
+license: MIT
+preferred-citation:
+  type: generic
+  title: "Incentive-based Fleet Rebalancing in Vehicle-Sharing Systems via Equilibrium-Constrained Optimal Control"
+  authors:
+    - family-names: Tihanyi
+      given-names: Daniel
+    - family-names: Belgioioso
+      given-names: Giuseppe
+  year: 2026
+  notes: "Submitted to the 2027 European Control Conference (ECC)"
