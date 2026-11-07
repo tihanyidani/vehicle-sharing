@@ -1,6 +1,6 @@
 # Incentive-based Fleet Rebalancing in Vehicle-Sharing Systems
 
-**Paper:** [PDF](paper/Tihanyi_Belgioioso_2026_extended.pdf) · Submitted to the 2027 European Control Conference (ECC 2027)
+**Paper:** [Extended version (PDF)](paper/Tihanyi_Belgioioso_2026_extended.pdf) · Submitted to the 2027 European Control Conference (ECC 2027)
 
 Code and data for the paper
 
@@ -10,9 +10,9 @@ The operator of a free-floating vehicle-sharing system offers fare discounts (in
 
 ## Paper
 
-The submitted version of the paper is available in [`paper/`](paper/Tihanyi_Belgioioso_2026_extended.pdf). An extended version will be posted on arXiv.
+An extended version of the paper, including the appendix, is available in [`paper/`](paper/Tihanyi_Belgioioso_2026_extended.pdf). The conference version has been submitted to ECC 2027, and the extended version will also be posted on arXiv.
 
-> **Note:** This is the version submitted for peer review and may differ from the final published version.
+> **Note:** This version has not been peer reviewed and may differ from the final published version. Figure, table, algorithm and equation numbers below refer to this extended version.
 
 ## Installation
 
@@ -56,11 +56,11 @@ Set `EXPERIMENT` (and `NAIVE` where listed) at the top of `1_main.py` and `2_pos
 
 | Paper                                              | `EXPERIMENT`                     | `NAIVE` | Output                                                                     |
 |----------------------------------------------------|----------------------------------|---------|----------------------------------------------------------------------------|
-| Fig. 2 (regions)                                   | n/a: produced by `0_pre_proc.py` | n/a     | `dataset/figures/metadata_region_bounds.pdf`                               |
-| Fig. 3 (incentives and leaving users over the day) | `Helsinki_case_study`            | `False` | `results/Helsinki_case_study/run/figs/agg_comp_simple.pdf`                 |
+| Fig. 1 (regions)                                   | n/a: produced by `0_pre_proc.py` | n/a     | `dataset/figures/metadata_region_bounds.pdf`                               |
+| Fig. 2 (incentives and leaving users over the day) | `Helsinki_case_study`            | `False` | `results/Helsinki_case_study/run/figs/agg_comp_simple.pdf`                 |
 | Table I (comparison with baselines)                | `Helsinki_case_study`            | `True`  | `results/Helsinki_case_study/run/tables/u_le_comp.csv`                     |
-| Fig. 4 (leaving users over 10 days)                | `Helsinki_comp_days`             | `False` | `results/Helsinki_comp_days/comp_results/figs/leaving_users_comp_days.pdf` |
-| Fig. 5 (100 random initialisations)                | `Helsinki_rand_init_100`         | ignored | `results/Helsinki_rand_init_100/comp_results/figs/convergence_comp.pdf`    |
+| Fig. 3 (leaving users over 10 days)                | `Helsinki_comp_days`             | `False` | `results/Helsinki_comp_days/comp_results/figs/leaving_users_comp_days.pdf` |
+| Fig. 4 (100 random initialisations)                | `Helsinki_rand_init_100`         | ignored | `results/Helsinki_rand_init_100/comp_results/figs/convergence_comp.pdf`    |
 
 Running `Helsinki_case_study` with `NAIVE = False` overwrites `u_le_comp.csv` with the zero-incentive and Algorithm 1 rows only. Run it with `NAIVE = True` afterwards to restore the full Table I.
 
@@ -78,7 +78,7 @@ dataset/
   metadata/            HSL station metadata
   procdata/            regions, per-day demand, shared parameters (metaparams.yaml)
   figures/             region maps
-paper/                 submitted version of the paper
+paper/                 extended version of the paper
 results/               saved runs, figures and tables per experiment
 utils/                 model, algorithm and helpers (below)
 ```
