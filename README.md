@@ -89,8 +89,8 @@ How the modules in `utils/` relate to the paper:
 |------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
 | `Params.py`                                    | Model parameters: rewards (5), dynamics (2), cost weights (13)                                                              |
 | `Map.py`, `Demand.py`                          | Regions and inter-region distances; demand flows d^pu, d^do                                                                 |
-| `T_map.py`                                     | v-GNE (7) solved with CVXPY, primal–dual relation (21), state update map (14)                                               |
-| `dT_map.py`                                    | Algorithm 4: implicit differentiation through the dual fixed point (22)                                                     |
+| `T_map.py`                                     | v-GNE (7) solved with CVXPY, primal–dual relation (22), state update map (14)                                               |
+| `dT_map.py`                                    | Algorithm 4: implicit differentiation through the dual fixed point (23)                                                     |
 | `g_map.py`                                     | Stage cost (13), (15) and terminal cost                                                                                     |
 | `Optimizer.py`                                 | `ForwardBackward`: Algorithms 1–3 (projected gradient descent, backpropagation, forward pass); `OneStep`: one-step baseline |
 | `Projector.py`                                 | Projection onto the feasible set Ω                                                                                          |
