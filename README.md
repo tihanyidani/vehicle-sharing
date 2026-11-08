@@ -106,7 +106,7 @@ Notation used in the code: `th` is the incentive θ, `p` the users' choice distr
 - **Trips:** `dataset/rawdata/2025-05.csv` comes from [City bike stations' Origin-Destination (OD) data](https://hri.fi/data/en/dataset/11b6916b-2529-474e-b068-b8f05c59309a) by Helsinki Region Transport (HSL) and City Bike Finland, published on Helsinki Region Infoshare under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 - **Stations:** `dataset/metadata/Helsingin_ja_Espoon_kaupunkipyöräasemat_avoin_*.csv` comes from [Helsinki Region Transport's (HSL) city bicycle stations](https://hri.fi/data/en_GB/dataset/hsl-n-kaupunkipyoraasemat) by HSL, published on Helsinki Region Infoshare under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 - **Processed data:** the files in `dataset/procdata/` are derived from the two datasets above by `0_pre_proc.py`.
-- **Basemap:** the map figures use the Esri World Light Gray Canvas basemap (Tiles © Esri — Esri, DeLorme, NAVTEQ). The tiles are not redistributed. `0_pre_proc.py` downloads them and caches them locally in `dataset/procdata/basemap.npz`, which is ignored by git.
+- **Basemap:** the map figures use the Esri World Light Gray Canvas basemap. Basemap © 2026 Esri and its licensors; sources: Esri, HERE, Garmin, © OpenStreetMap contributors, and the GIS user community. The map figures in `dataset/figures/` and in the paper are static map images, used under [Esri's terms of use for static maps](https://doc.arcgis.com/en/arcgis-online/reference/static-maps.htm). The basemap tiles themselves are not redistributed: `0_pre_proc.py` downloads them and caches them locally in `dataset/procdata/basemap.npz`, which is ignored by git.
 
 ## Citation
 
@@ -123,7 +123,7 @@ If you use this code, please cite the paper (GitHub also offers a "Cite this rep
 
 ## License
 
-The code is released under the [MIT License](LICENSE). The HSL data in `dataset/` remains under its original CC BY 4.0 license. The paper in `paper/` is not covered by the MIT License; all rights remain with the authors.
+The code is released under the [MIT License](LICENSE). The HSL data in `dataset/` remains under its original CC BY 4.0 license. The paper in `paper/` is not covered by the MIT License; all rights remain with the authors. The Esri basemap shown in the map figures, in `dataset/figures/` and in the paper, is not covered by either license and remains © Esri and its licensors (see [Data](#data)).
 
 ## Contact
 
