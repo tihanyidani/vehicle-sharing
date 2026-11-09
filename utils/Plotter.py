@@ -1287,8 +1287,8 @@ class Plotter:
     def plot_convergence_comp(cost_hist_list, show=True):
         """Plot the cost convergence of several runs as a fan chart: the median
         cost per iteration across runs as a line, over a band between the 25th
-        and 75th percentiles and a lighter band between the 5th and 95th
-        percentiles. Runs that stopped early are extended with their final
+        and 75th percentiles and a lighter band covering the full range
+        (lowest to highest cost). Runs that stopped early are extended with their final
         cost, since a converged run stays there.
         Right of the last iterate, two short horizontal lines mark the lowest
         and the highest final cost, each pointed at by an arrow from outside
@@ -1311,14 +1311,15 @@ class Plotter:
         costs = np.vstack([np.pad(np.asarray(cost, dtype=float), (0, n_it - len(cost)), mode="edge")
                            for cost in cost_hist_list])
         iters = np.arange(n_it)    # cost[k] is J(θ^(k)), with θ^(0) the initial guess
-        p5, p25, p50, p75, p95 = np.percentile(costs, [5, 25, 50, 75, 95], axis=0)
+        p25, p50, p75 = np.percentile(costs, [25, 50, 75], axis=0)
+        c_min, c_max  = costs.min(axis=0), costs.max(axis=0)
 
         fig, ax = plt.subplots(figsize=(10, 5))   # height leaves room for the legend above
 
-        ax.fill_between(iters, p5,  p95, color=color, alpha=0.15, linewidth=0,
-                        label="5th–95th")
+        ax.fill_between(iters, c_min, c_max, color=color, alpha=0.15, linewidth=0,
+                        label="all runs")
         ax.fill_between(iters, p25, p75, color=color, alpha=0.35, linewidth=0,
-                        label="25th–75th")
+                        label="25th–75th percentile")
         ax.plot(iters, p50, color=color, linewidth=2, label="median")
 
         # Spread of the final cost across runs, right of the last iterate:
@@ -1346,8 +1347,8 @@ class Plotter:
         ax.set_ylabel(r"$V_0(x_0,\boldsymbol{\theta}^{(k)})$", fontsize=Plotter.LABEL_FS)
         ax.tick_params(labelsize=Plotter.TICK_FS)
         # Start at 0; top derived from the data (5 % headroom above the
-        # 95th percentile) so it survives cost-scale changes (e.g. a different dt).
-        y_hi = p95.max()
+        # highest cost of any run) so it survives cost-scale changes (e.g. a different dt).
+        y_hi = c_max.max()
         ax.set_ylim(0, 1.05 * y_hi if y_hi > 0 else 1.0)
         ax.grid(True, linestyle="--", alpha=0.5)
 
