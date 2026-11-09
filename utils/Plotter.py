@@ -1286,14 +1286,14 @@ class Plotter:
     @staticmethod
     def plot_convergence_comp(cost_hist_list, show=True):
         """Plot the cost convergence of several runs as a fan chart: the median
-        cost per iteration as a line, over a 25–75 % band and a lighter
-        5–95 % band (percentiles across runs). Runs that stopped early are
-        extended with their final cost, since a converged run stays there.
+        cost per iteration across runs as a line, over a band between the 25th
+        and 75th percentiles and a lighter band between the 5th and 95th
+        percentiles. Runs that stopped early are extended with their final
+        cost, since a converged run stays there.
         Right of the last iterate, two short horizontal lines mark the lowest
         and the highest final cost, each pointed at by an arrow from outside
-        (above the highest, below the lowest) marking the spread between runs;
-        the spread as a % of the median final cost is written right of them
-        (as in plot_final_comp, which uses the mean).
+        (above the highest, below the lowest); the difference between them as
+        a % of the median final cost is written right of them.
         The legend sits above the panel, right-aligned with it (see _legend_above).
 
         Args:
@@ -1310,19 +1310,21 @@ class Plotter:
         n_it  = max(len(cost) for cost in cost_hist_list)
         costs = np.vstack([np.pad(np.asarray(cost, dtype=float), (0, n_it - len(cost)), mode="edge")
                            for cost in cost_hist_list])
-        iters = np.arange(n_it)    # cost[k] is J(θ^k), with θ^0 the initial guess
+        iters = np.arange(n_it)    # cost[k] is J(θ^(k)), with θ^(0) the initial guess
         p5, p25, p50, p75, p95 = np.percentile(costs, [5, 25, 50, 75, 95], axis=0)
 
         fig, ax = plt.subplots(figsize=(10, 5))   # height leaves room for the legend above
 
-        ax.fill_between(iters, p5,  p95, color=color, alpha=0.15, linewidth=0, label="5–95 %")
-        ax.fill_between(iters, p25, p75, color=color, alpha=0.35, linewidth=0, label="25–75 %")
+        ax.fill_between(iters, p5,  p95, color=color, alpha=0.15, linewidth=0,
+                        label="5th–95th")
+        ax.fill_between(iters, p25, p75, color=color, alpha=0.35, linewidth=0,
+                        label="25th–75th")
         ax.plot(iters, p50, color=color, linewidth=2, label="median")
 
         # Spread of the final cost across runs, right of the last iterate:
         # short lines at the lowest and highest final cost, each with an
         # arrow pointing at it from outside (fixed length in points, so it
-        # stays visible however close the lines are), with the spread as a %
+        # stays visible however close the lines are), with (max − min) as a %
         # of the median beside them.
         final = costs[:, -1]
         lo, hi = final.min(), final.max()
@@ -1338,10 +1340,10 @@ class Plotter:
         spread_pct = (hi - lo) / np.median(final) * 100
         spread_label = ax.text(k_last + 4 * dx, (hi + lo) / 2, f"{spread_pct:.1f} %",
                                ha="left", va="center", fontsize=Plotter.TICK_FS)
-        ax.set_xlim(0, k_last + 12 * dx)    # start at θ^0; provisional right end
+        ax.set_xlim(0, k_last + 12 * dx)    # start at θ^(0); provisional right end
 
         ax.set_xlabel(r"iteration $k$", fontsize=Plotter.LABEL_FS)
-        ax.set_ylabel(r"$V_0(x_0,\boldsymbol{\theta}^k)$", fontsize=Plotter.LABEL_FS)
+        ax.set_ylabel(r"$V_0(x_0,\boldsymbol{\theta}^{(k)})$", fontsize=Plotter.LABEL_FS)
         ax.tick_params(labelsize=Plotter.TICK_FS)
         # Start at 0; top derived from the data (5 % headroom above the
         # 95th percentile) so it survives cost-scale changes (e.g. a different dt).
