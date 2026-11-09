@@ -5,6 +5,13 @@ range ("dir"/"start_date"/"n_scenarios"), or a single scenario when it
 gives an explicit "dropoff_csv"/"pickup_csv" pair.
 """
 
+import os
+
+# Resolve all relative paths (experiments/, dataset/, results/) against this
+# script's folder, so it runs from any working directory (e.g. a VS Code
+# workspace opened one level up).
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 from utils.Interface import Interface
 from utils.MainIterate import MainIterate
 

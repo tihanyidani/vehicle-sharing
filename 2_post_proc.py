@@ -1,5 +1,11 @@
 """Post-processing — loads optimisation results and visualises them."""
 
+import os
+
+# Resolve all relative paths (experiments/, dataset/, results/) against this
+# script's folder, so it runs from any working directory.
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 from utils.Map         import Map
 from utils.Params      import Params
 from utils.Interface   import Interface
@@ -9,7 +15,7 @@ from utils.ProcIterate import ProcIterate
 # Paper experiments: "Helsinki_case_study" (Fig. 3, Table I; NAIVE = True),
 # "Helsinki_comp_days" (Fig. 4; NAIVE = False), "Helsinki_rand_init_100" (Fig. 5; NAIVE ignored).
 EXPERIMENT  = "Helsinki_case_study"  # experiment name — must match a file in experiments/
-NAIVE       = True                   # True: post-process every strategy; False: zero-incentive and Algorithm 1 only
+NAIVE       = True                  # True: post-process every strategy; False: zero-incentive and Algorithm 1 only
 GIFS        = False                  # True: render and save .gif animations (slow); False: skip them
 CALC        = True                   # True: recompute the comparison results and save them; False: load them from the previous CALC=True run
 

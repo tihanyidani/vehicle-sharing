@@ -1343,7 +1343,10 @@ class Plotter:
         ax.set_xlabel(r"iteration $k$", fontsize=Plotter.LABEL_FS)
         ax.set_ylabel(r"$V_0(x_0,\boldsymbol{\theta}^k)$", fontsize=Plotter.LABEL_FS)
         ax.tick_params(labelsize=Plotter.TICK_FS)
-        ax.set_ylim(bottom=0.48e6)
+        # Start at 0; top derived from the data (5 % headroom above the
+        # 95th percentile) so it survives cost-scale changes (e.g. a different dt).
+        y_hi = p95.max()
+        ax.set_ylim(0, 1.05 * y_hi if y_hi > 0 else 1.0)
         ax.grid(True, linestyle="--", alpha=0.5)
 
         ax.yaxis.get_offset_text().set_fontsize(Plotter.OFFSET_FS)
@@ -1429,7 +1432,8 @@ class Plotter:
     @staticmethod
     def plot_agg_comp(z_traj_list, th_traj_list, d_traj_list, o_traj_list, l_traj_list,
                       legend_name_list, params, d_max, o_max, th_max, u_le_max,
-                      title="Aggregate trajectories — comparison", show=True):
+                      title="Aggregate trajectories — comparison", show=True,
+                      bundle_label=None):
         """Plot aggregated demand, incentive, and leaving-users trajectories,
         overlaying one series per entry per metric.
 
@@ -1466,6 +1470,12 @@ class Plotter:
             title:            str — accepted for call-site compatibility; the figure has
                               no titles.
             show:             bool — call plt.show() at the end.
+            bundle_label:     str or None — if given, every series except the last is
+                              drawn as one thin, translucent bundle in a single colour
+                              under this one legend label, and the last series (e.g. the
+                              zero-incentive reference) is drawn bold under its own name.
+                              Use for sweeps with many runs (e.g. 100 random th0), where
+                              per-run colours repeat and a per-run legend can't fit.
 
         Returns:
             matplotlib Figure.
@@ -1523,8 +1533,17 @@ class Plotter:
                 _, d_pu_agg = Transformer.agg_d_traj(d_traj)
                 ax_pu.step(np.arange(len(d_pu_agg)), d_pu_agg, where="post", color="black")
 
-            ax_th.step(t_th, th_agg, where="post", color=color, label=name)
-            ax_le.step(t_x,  x_le,   where="post", color=color, label=name)
+            style = {"color": color, "label": name}
+            if bundle_label is not None:
+                if i < len(z_traj_list) - 1:
+                    # One legend entry for the whole bundle (labels starting "_" are hidden).
+                    style = {"color": colors[0], "alpha": 0.3, "linewidth": 0.8,
+                             "label": bundle_label if i == 0 else "_bundle"}
+                else:
+                    style = {"color": colors[3], "linewidth": 2.0, "label": name}
+
+            ax_th.step(t_th, th_agg, where="post", **style)
+            ax_le.step(t_x,  x_le,   where="post", **style)
 
         ax_pu.set_ylabel("demand (pick-up)", fontsize=label_fs)
         _time_axis(ax_pu)
@@ -1550,11 +1569,16 @@ class Plotter:
         # One shared legend above the top panel, right-aligned with it — every
         # legended panel carries the same series.
         handles, labels = ax_th.get_legend_handles_labels()
-        Plotter._legend_above(
+        legend = Plotter._legend_above(
             fig, ax_pu, handles, labels, legend_fs,
             clear_pt=legend_gap,
             ceiling=legend_ceiling,
             set_top=lambda d: outer.update(top=outer.top - d))
+        if bundle_label is not None:
+            # The bundle's lines are faint by design; keep its legend sample readable.
+            for line in legend.get_lines():
+                line.set_alpha(1.0)
+                line.set_linewidth(2.0)
 
         if show:
             plt.show()

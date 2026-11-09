@@ -534,7 +534,8 @@ class ProcIterate_th0(ProcIterate):
         fig_agg_comp = Plotter.plot_agg_comp(
             z_traj_agg, th_traj_agg, d_traj_agg, o_traj_agg, l_traj_agg,
             tags_agg, params, d_max_agg, s_max_agg, th_max_agg, u_le_max_agg,
-            title="Aggregate trajectories — th0 sweep", show=False)
+            title="Aggregate trajectories — th0 sweep", show=False,
+            bundle_label=f"Algorithm 1, {len(tags)} random initial incentives")
         Interface.save_figures({"agg_comp": fig_agg_comp},
                                 dir_path=f"results/{experiment}/comp_results/figs")
 

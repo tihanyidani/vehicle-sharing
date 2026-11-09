@@ -64,7 +64,7 @@ Set `EXPERIMENT` (and `NAIVE` where listed) at the top of `1_main.py` and `2_pos
 
 Running `Helsinki_case_study` with `NAIVE = False` overwrites `u_le_comp.csv` with the zero-incentive and Algorithm 1 rows only. Run it with `NAIVE = True` afterwards to restore the full Table I.
 
-The experiments share all model and solver parameters (see the YAML files): incentive sensitivity λ = 500 m, base cost of leaving w_∅ = 100 m, temperature τ = 50 m, cost weights γ_R = 1 and γ_Q = 10, maximum incentive θ̄ = 1, initial distribution of 10 vehicles per region, and 20 iterations of Algorithm 1 with step sizes α_k = 1/(k+1)³.
+The experiments share all model and solver parameters (see the YAML files): time step Δt = 0.25 h (demand in users per hour), incentive sensitivity λ = 500 m, base cost of leaving w_∅ = 100 m, temperature τ = 50 m, cost weights γ_R = 1 and γ_Q = 10 (γ_R = 0.5 and γ_Q = 5 in the convention of (13)), maximum incentive θ̄ = 1, initial distribution of 10 vehicles per region, and 20 iterations of Algorithm 1 with step sizes α_k = 1/(k+1).
 
 ## Code structure
 

@@ -8,5 +8,5 @@ map:
   csv_path: dataset/procdata/metadata.csv
 
 # ── Dynamics ────────────────────────────────────────────────────────────────
-dt: 1     # time step (hours — demand is in users/hour)
+dt: 0.25  # time step (hours — demand is in users/hour; 0.25 h = one 15-min cluster)
 T:  96    # horizon length — one full day of 15-min demand clusters
